@@ -1,3 +1,29 @@
+CHANGES FROM http://github.com/rails/open_id_authentication
+===========================================================
+
+The default Rails open_id_authentication plugin, upon success, returns an object of type:
+
+OpenID::SReg::Response
+
+This is fine if the OpenID provider you are using supports SReg.  However, many (read: most,
+including Google), don't support SReg, but instead support Attribute Exchange (AX).  In these
+cases, what you want is an object of type:
+
+OpenID::AX::FetchResponse
+
+This fork simply delays that decision to the user, returning the raw rack OpenID response:
+
+request.env[Rack::OpenID::RESPONSE]
+
+Then, as a user, you can do something like this, which allows you to have your cake (SReg) and
+eat it, too (AX):
+
+sreg = OpenID::SReg::Response.from_success_response(response)
+ax = OpenID::AX::FetchResponse.from_success_response(response)
+
+Hopefully they'll merge this back into the main project.  The way it's done now is, IMO, "not correct(tm)".
+
+
 OpenIdAuthentication
 ====================
 
