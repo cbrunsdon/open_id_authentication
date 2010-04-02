@@ -111,8 +111,7 @@ module OpenIdAuthentication
 
       case response.status
       when OpenID::Consumer::SUCCESS
-        yield Result[:successful], identifier,
-          OpenID::SReg::Response.from_success_response(response)
+        yield Result[:successful], identifier, response
       when :missing
         yield Result[:missing], identifier, nil
       when :invalid
