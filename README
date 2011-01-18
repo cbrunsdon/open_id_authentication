@@ -11,17 +11,10 @@ cases, what you want is an object of type:
 
 OpenID::AX::FetchResponse
 
-This fork simply delays that decision to the user, returning the raw rack OpenID response:
+This fork takes a different direction and returns a AuthenticationSucess object that makes it easy to fetch the different response types.
 
-request.env[Rack::OpenID::RESPONSE]
+You can now call response.ax, response.sreg, or response.oauth to retrieve the different extension data.
 
-Then, as a user, you can do something like this, which allows you to have your cake (SReg) and
-eat it, too (AX):
-
-sreg = OpenID::SReg::Response.from_success_response(response)
-ax = OpenID::AX::FetchResponse.from_success_response(response)
-
-Hopefully they'll merge this back into the main project.  The way it's done now is, IMO, "not correct(tm)".
 
 
 OpenIdAuthentication
