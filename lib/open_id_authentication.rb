@@ -111,7 +111,7 @@ module OpenIdAuthentication
 
       case response.status
       when OpenID::Consumer::SUCCESS
-        yield Result[:successful], identifier, response
+        yield Result[:successful], identifier, AuthenticationSuccess.new(response)
       when :missing
         yield Result[:missing], identifier, nil
       when :invalid
@@ -122,6 +122,23 @@ module OpenIdAuthentication
         yield Result[:failed], identifier, nil
       when OpenID::Consumer::SETUP_NEEDED
         yield Result[:setup_needed], response.setup_url, nil
+      end
+    end
+
+    # this class keeps all the messy initialization of response objects from callers, 
+    # while not specifying the specific type of response that needs to be returned
+    class AuthenticationSuccess
+      def initialize(response)
+          @response = response
+      end
+      def sreg
+          @sreg ||= OpenID::SReg::Response.from_success_response(@response)
+      end
+      def ax
+          @ax ||= OpenID::AX::FetchResponse.from_success_response(@response)
+      end
+      def oauth
+          @ax ||= OpenID::OAuth::Response.from_success_response(@response)
       end
     end
 end
