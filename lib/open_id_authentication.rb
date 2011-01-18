@@ -138,7 +138,7 @@ module OpenIdAuthentication
           @ax ||= OpenID::AX::FetchResponse.from_success_response(@response)
       end
       def oauth
-          @ax ||= OpenID::OAuth::Response.from_success_response(@response)
+          @oauth ||= OpenID::OAuth::Response.from_success_response(@response)
       end
     end
 end
